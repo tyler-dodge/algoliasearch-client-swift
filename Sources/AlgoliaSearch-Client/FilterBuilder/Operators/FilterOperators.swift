@@ -8,8 +8,8 @@
 
 import Foundation
 
-public typealias FacetTuple = (Attribute, FilterFacet.ValueType)
-public typealias ComparisonTuple = (Attribute, FilterNumeric.NumericOperator, Float)
+public typealias FacetTuple = (Attribute, Filter.Facet.ValueType)
+public typealias ComparisonTuple = (Attribute, Filter.Numeric.NumericOperator, Float)
 public typealias RangeTuple = (Attribute, ClosedRange<Float>)
 
 precedencegroup FilterGroupPrecedence {
@@ -21,7 +21,7 @@ infix operator +++: FilterGroupPrecedence
 infix operator ---: FilterGroupPrecedence
 infix operator <>: FilterGroupPrecedence
 
-@discardableResult public prefix func ! <T: Filter>(f: T) -> T {
+@discardableResult public prefix func ! <T: FilterType>(f: T) -> T {
     var mutableFilterCopy = f
     mutableFilterCopy.not(value: !f.isNegated)
     return mutableFilterCopy

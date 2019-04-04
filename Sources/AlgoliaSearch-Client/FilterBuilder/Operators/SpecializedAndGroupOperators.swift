@@ -10,12 +10,12 @@ import Foundation
 
 // MARK: Appending
 
-@discardableResult public func +++ <T: Filter>(left: SpecializedAndGroupProxy<T>, right: T) -> SpecializedAndGroupProxy<T> {
+@discardableResult public func +++ <T: FilterType>(left: SpecializedAndGroupProxy<T>, right: T) -> SpecializedAndGroupProxy<T> {
     left.add(right)
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == T {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == T {
     left.addAll(right)
     return left
 }
@@ -25,7 +25,7 @@ import Foundation
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == FacetTuple {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == FacetTuple {
     left.addAll(right.map(FilterFacet.init))
     return left
 }
@@ -35,7 +35,7 @@ import Foundation
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == ComparisonTuple {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == ComparisonTuple {
     left.addAll(right.map(FilterNumeric.init))
     return left
 }
@@ -45,7 +45,7 @@ import Foundation
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == RangeTuple {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == RangeTuple {
     left.addAll(right.map(FilterNumeric.init))
     return left
 }
@@ -57,12 +57,12 @@ import Foundation
 
 // MARK: Removal
 
-@discardableResult public func --- <T: Filter>(left: SpecializedAndGroupProxy<T>, right: T) -> SpecializedAndGroupProxy<T> {
+@discardableResult public func --- <T: FilterType>(left: SpecializedAndGroupProxy<T>, right: T) -> SpecializedAndGroupProxy<T> {
     left.remove(right)
     return left
 }
 
-@discardableResult public func --- <T: Filter, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == T {
+@discardableResult public func --- <T: FilterType, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == T {
     left.removeAll(right)
     return left
 }
@@ -104,12 +104,12 @@ import Foundation
 
 // MARK: - Toggling
 
-@discardableResult public func <> <T: Filter>(left: SpecializedAndGroupProxy<T>, right: T) -> SpecializedAndGroupProxy<T> {
+@discardableResult public func <> <T: FilterType>(left: SpecializedAndGroupProxy<T>, right: T) -> SpecializedAndGroupProxy<T> {
     left.toggle(right)
     return left
 }
 
-@discardableResult public func <> <T: Filter, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == T {
+@discardableResult public func <> <T: FilterType, S: Sequence>(left: SpecializedAndGroupProxy<T>, right: S) -> SpecializedAndGroupProxy<T> where S.Element == T {
     right.forEach(left.toggle)
     return left
 }

@@ -10,12 +10,12 @@ import Foundation
 
 // MARK: Appending
 
-@discardableResult public func +++ <T: Filter>(left: AndGroupProxy, right: T) -> AndGroupProxy {
+@discardableResult public func +++ <T: FilterType>(left: AndGroupProxy, right: T) -> AndGroupProxy {
     left.filterBuilder.add(right, to: left.group)
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: AndGroupProxy, right: S) -> AndGroupProxy where S.Element == T {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: AndGroupProxy, right: S) -> AndGroupProxy where S.Element == T {
     left.filterBuilder.addAll(filters: right, to: left.group)
     return left
 }
@@ -57,12 +57,12 @@ import Foundation
 
 // MARK: Removal
 
-@discardableResult public func --- <T: Filter>(left: AndGroupProxy, right: T) -> AndGroupProxy {
+@discardableResult public func --- <T: FilterType>(left: AndGroupProxy, right: T) -> AndGroupProxy {
     left.filterBuilder.remove(right, from: left.group)
     return left
 }
 
-@discardableResult public func --- <T: Filter, S: Sequence>(left: AndGroupProxy, right: S) -> AndGroupProxy where S.Element == T {
+@discardableResult public func --- <T: FilterType, S: Sequence>(left: AndGroupProxy, right: S) -> AndGroupProxy where S.Element == T {
     left.filterBuilder.removeAll(right, from: left.group)
     return left
 }
@@ -104,12 +104,12 @@ import Foundation
 
 // MARK: - Toggling
 
-@discardableResult public func <> <T: Filter>(left: AndGroupProxy, right: T) -> AndGroupProxy {
+@discardableResult public func <> <T: FilterType>(left: AndGroupProxy, right: T) -> AndGroupProxy {
     left.toggle(right)
     return left
 }
 
-@discardableResult public func <> <T: Filter, S: Sequence>(left: AndGroupProxy, right: S) -> AndGroupProxy where S.Element == T {
+@discardableResult public func <> <T: FilterType, S: Sequence>(left: AndGroupProxy, right: S) -> AndGroupProxy where S.Element == T {
     right.forEach(left.toggle)
     return left
 }

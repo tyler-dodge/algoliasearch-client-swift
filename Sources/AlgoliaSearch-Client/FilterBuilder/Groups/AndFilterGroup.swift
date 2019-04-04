@@ -11,14 +11,35 @@ import Foundation
 /// Representation of conjunctive group of filters
 
 public struct AndFilterGroup: FilterGroup {
-    public let name: String
+  
+  public var filters: [FilterType]
+  
+  public var isEmpty: Bool {
+    return filters.isEmpty
+  }
+  
+  public init(filters: [FilterType]) {
+      self.filters = filters
+  }
+  
+  public static func and(_ filters: [FilterType]) -> AndFilterGroup {
+      return AndFilterGroup(filters: filters)
+  }
+
+  public var description: String {
+    let filtersDescription = filters.map { $0.description }.joined(separator: " AND ")
     
-    public init(name: String) {
-        self.name = name
+    switch filters.count {
+    case 0:
+      return ""
+      
+    case 1:
+      return filtersDescription
+      
+    default:
+      return "( \(filtersDescription) )"
     }
     
-    public static func and(_ name: String) -> AndFilterGroup {
-        return AndFilterGroup(name: name)
-    }
+  }
     
 }

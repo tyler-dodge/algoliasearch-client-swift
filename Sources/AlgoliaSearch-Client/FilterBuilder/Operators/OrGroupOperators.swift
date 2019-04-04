@@ -10,43 +10,43 @@ import Foundation
 
 // MARK: Appending
 
-@discardableResult public func +++ <T: Filter>(left: OrGroupProxy<T>, right: T) -> OrGroupProxy<T> {
+@discardableResult public func +++ <T: FilterType>(left: OrGroupProxy<T>, right: T) -> OrGroupProxy<T> {
     left.filterBuilder.add(right, to: left.group)
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == T {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == T {
     left.filterBuilder.addAll(filters: right, to: left.group)
     return left
 }
 
-@discardableResult public func +++ (left: OrGroupProxy<FilterFacet>, right: FacetTuple) -> OrGroupProxy<FilterFacet> {
+@discardableResult public func +++ (left: OrGroupProxy<Filter.Facet>, right: FacetTuple) -> OrGroupProxy<FilterFacet> {
     left.filterBuilder.add(FilterFacet(right), to: left.group)
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == FacetTuple {
-    left.filterBuilder.addAll(filters: right.map(FilterFacet.init), to: left.group)
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == FacetTuple {
+    left.filterBuilder.addAll(filters: right.map(Filter.Facet.init), to: left.group)
     return left
 }
 
-@discardableResult public func +++ (left: OrGroupProxy<FilterNumeric>, right: ComparisonTuple) -> OrGroupProxy<FilterNumeric> {
+@discardableResult public func +++ (left: OrGroupProxy<Filter.Numeric>, right: ComparisonTuple) -> OrGroupProxy<FilterNumeric> {
     left.filterBuilder.add(FilterNumeric(right), to: left.group)
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == ComparisonTuple {
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == ComparisonTuple {
     left.filterBuilder.addAll(filters: right.map(FilterNumeric.init), to: left.group)
     return left
 }
 
-@discardableResult public func +++ (left: OrGroupProxy<FilterNumeric>, right: RangeTuple) -> OrGroupProxy<FilterNumeric> {
+@discardableResult public func +++ (left: OrGroupProxy<Filter.Numeric>, right: RangeTuple) -> OrGroupProxy<FilterNumeric> {
     left.filterBuilder.add(FilterNumeric(right), to: left.group)
     return left
 }
 
-@discardableResult public func +++ <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == RangeTuple {
-    left.filterBuilder.addAll(filters: right.map(FilterNumeric.init), to: left.group)
+@discardableResult public func +++ <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == RangeTuple {
+    left.filterBuilder.addAll(filters: right.map(Filter.Numeric.init), to: left.group)
     return left
 }
 
@@ -57,12 +57,12 @@ import Foundation
 
 // MARK: Removal
 
-@discardableResult public func --- <T: Filter>(left: OrGroupProxy<T>, right: T) -> OrGroupProxy<T> {
+@discardableResult public func --- <T: FilterType>(left: OrGroupProxy<T>, right: T) -> OrGroupProxy<T> {
     left.filterBuilder.remove(right, from: left.group)
     return left
 }
 
-@discardableResult public func --- <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == T {
+@discardableResult public func --- <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == T {
     left.filterBuilder.removeAll(right, from: left.group)
     return left
 }
@@ -72,7 +72,7 @@ import Foundation
     return left
 }
 
-@discardableResult public func --- <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == FacetTuple {
+@discardableResult public func --- <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == FacetTuple {
     left.filterBuilder.removeAll(right.map(FilterFacet.init), from: left.group)
     return left
 }
@@ -82,7 +82,7 @@ import Foundation
     return left
 }
 
-@discardableResult public func --- <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == ComparisonTuple {
+@discardableResult public func --- <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == ComparisonTuple {
     left.filterBuilder.removeAll(right.map(FilterNumeric.init), from: left.group)
     return left
 }
@@ -92,7 +92,7 @@ import Foundation
     return left
 }
 
-@discardableResult public func --- <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == RangeTuple {
+@discardableResult public func --- <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == RangeTuple {
     left.filterBuilder.removeAll(right.map(FilterNumeric.init), from: left.group)
     return left
 }
@@ -104,12 +104,12 @@ import Foundation
 
 // MARK: - Toggling
 
-@discardableResult public func <> <T: Filter>(left: OrGroupProxy<T>, right: T) -> OrGroupProxy<T> {
+@discardableResult public func <> <T: FilterType>(left: OrGroupProxy<T>, right: T) -> OrGroupProxy<T> {
     left.toggle(right)
     return left
 }
 
-@discardableResult public func <> <T: Filter, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == T {
+@discardableResult public func <> <T: FilterType, S: Sequence>(left: OrGroupProxy<T>, right: S) -> OrGroupProxy<T> where S.Element == T {
     right.forEach(left.toggle)
     return left
 }

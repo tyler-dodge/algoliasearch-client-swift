@@ -10,23 +10,44 @@ import Foundation
 
 /// Representation of disjunctive group of filters
 
-public struct OrFilterGroup<T: Filter>: FilterGroup {
-    public let name: String
+public struct OrFilterGroup<T: FilterType>: FilterGroup {
+  
+  var filters: [T]
+  
+  public var isEmpty: Bool {
+    return filters.isEmpty
+  }
+  
+  public init(filters: [T] = []) {
+    self.filters = filters
+  }
+  
+  public static func or<T: FilterType>(_ filters: [T]) -> OrFilterGroup<T> {
+    return OrFilterGroup<T>(filters: filters)
+  }
+  
+  public var description: String {
+    let filtersDescription = filters.map { $0.description }.joined(separator: " OR ")
     
-    public init(name: String) {
-        self.name = name
+    switch filters.count {
+    case 0:
+      return ""
+      
+    case 1:
+      return filtersDescription
+      
+    default:
+      return "( \(filtersDescription) )"
     }
-    
-    public static func or<T: Filter>(_ name: String) -> OrFilterGroup<T> {
-        return OrFilterGroup<T>(name: name)
-    }
-    
-    public static func or<T: Filter>(_ name: String, ofType: T.Type) -> OrFilterGroup<T> {
-        return OrFilterGroup<T>(name: name)
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-      hasher.combine(name)
-    }
-    
+  }
+  
+  
+}
+
+extension Array where Element: FilterGroup {
+  
+  var description: String {
+    return filter { !$0.isEmpty }.map { $0.description }.joined(separator: " AND ")
+  }
+  
 }

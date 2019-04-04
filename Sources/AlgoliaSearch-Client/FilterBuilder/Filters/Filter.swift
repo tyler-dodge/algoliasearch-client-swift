@@ -8,29 +8,21 @@
 
 import Foundation
 
+public enum Filter {}
+
 /// Abstract filter protocol
-public protocol Filter: Hashable {
+public protocol FilterType: CustomStringConvertible {
 
     /// Identifier of field affected by filter
     var attribute: Attribute { get }
     
     /// A Boolean value indicating whether filter is inverted
     var isNegated: Bool { get set }
-
-    /// String representation of filter excluding negation
-    var expression: String { get }
     
     /// Replaces isNegated property by a new value
     /// parameter value: new value of isNegated
     mutating func not(value: Bool)
     
-    /// Returns string representation of filter
-    /// - parameter ignoringInversion: if set to true, ignores filter negation
-    func build(ignoringInversion: Bool) -> String
-    
-    /// Returns the same filter with attribute replaced by a provided one
-    /// - parameter attribute: attribute replacement
-    func replacingAttribute(by attribute: Attribute) -> Self
 }
 
 /**
@@ -40,7 +32,7 @@ public protocol Filter: Hashable {
  https://www.bignerdranch.com/blog/breaking-down-type-erasures-in-swift/
  */
 
-private class _AnyFilterBase: AbstractClass, Filter {
+private class _AnyFilterBase: AbstractClass, FilterType, CustomStringConvertible {
     
     var attribute: Attribute {
         callMustOverrideError()
@@ -51,7 +43,7 @@ private class _AnyFilterBase: AbstractClass, Filter {
         set { callMustOverrideError() }
     }
     
-    var expression: String {
+    var description: String {
         callMustOverrideError()
     }
 
@@ -64,18 +56,14 @@ private class _AnyFilterBase: AbstractClass, Filter {
             impossibleInitError()
         }
     }
-    
-    func replacingAttribute(by attribute: Attribute) -> Self {
-        callMustOverrideError()
-    }
-    
+  
     static func == (lhs: _AnyFilterBase, rhs: _AnyFilterBase) -> Bool {
         callMustOverrideError()
     }
     
 }
 
-private final class _AnyFilterBox<Concrete: Filter>: _AnyFilterBase {
+private final class _AnyFilterBox<Concrete: FilterType>: _AnyFilterBase {
 
     var concrete: Concrete
     
@@ -92,34 +80,26 @@ private final class _AnyFilterBox<Concrete: Filter>: _AnyFilterBase {
         set { concrete.isNegated = newValue }
     }
     
-    override var expression: String {
-        return concrete.expression
+    override var description: String {
+        return concrete.description
     }
-
-    override func hash(into hasher: inout Hasher) {
-      hasher.combine(concrete)
-    }
-    
-    override func replacingAttribute(by attribute: Attribute) -> _AnyFilterBox {
-        return _AnyFilterBox(concrete.replacingAttribute(by: attribute))
-    }
-    
-    static func == (lhs: _AnyFilterBox, rhs: _AnyFilterBox) -> Bool {
-        return lhs.concrete == rhs.concrete
-    }
-    
+      
 }
 
-final class AnyFilter: Filter {
+final class AnyFilter: FilterType {
     
     private let box: _AnyFilterBase
     
-    init<Concrete: Filter>(_ concrete: Concrete) {
+    init<Concrete: FilterType>(_ concrete: Concrete) {
         box = _AnyFilterBox(concrete)
     }
     
     var attribute: Attribute {
         return box.attribute
+    }
+  
+    var description: String {
+      return box.description
     }
     
     var isNegated: Bool {
@@ -127,38 +107,16 @@ final class AnyFilter: Filter {
         set { box.isNegated = newValue }
     }
     
-    var expression: String {
-        return box.expression
-    }
-    
-    func hash(into hasher: inout Hasher) {
-      hasher.combine(box)
-    }
-    
-    func replacingAttribute(by attribute: Attribute) -> AnyFilter {
-        return AnyFilter(box.replacingAttribute(by: attribute))
-    }
-    
-    static func == (lhs: AnyFilter, rhs: AnyFilter) -> Bool {
-        return lhs.box.expression == rhs.box.expression
-    }
-    
-    func extractAsFilter<T: Filter>() -> T? {
+    func extractAsFilter<T: FilterType>() -> T? {
         return (box as? _AnyFilterBox<T>)?.concrete
     }
     
 }
 
-extension Filter {
-    public func build(ignoringInversion: Bool = false) -> String {
-        if !isNegated || ignoringInversion {
-            return expression
-        } else {
-            return "NOT \(expression)"
-        }
-    }
-
+extension FilterType {
+  
     public mutating func not(value: Bool = true) {
         isNegated = value
     }
+  
 }

@@ -10,7 +10,7 @@ import Foundation
 
 /// Provides a specific type-safe interface for FilterBuilder specialized for a conjunctive group specialized for filters of concrete type
 
-public struct SpecializedAndGroupProxy<T: Filter> {
+public struct SpecializedAndGroupProxy<T: FilterType> {
     
     private let genericProxy: AndGroupProxy
     
@@ -35,7 +35,7 @@ public struct SpecializedAndGroupProxy<T: Filter> {
     
     /// Adds the filters of a sequence to group
     /// - parameter filters: sequence of filters to add
-    public func addAll<T: Filter, S: Sequence>(_ filters: S) where S.Element == T {
+    public func addAll<T: FilterType, S: Sequence>(_ filters: S) where S.Element == T {
         genericProxy.addAll(filters)
     }
     
@@ -71,7 +71,7 @@ public struct SpecializedAndGroupProxy<T: Filter> {
     /// Replaces filter in group by specified filter replacement
     /// - parameter filter: filter to replace
     /// - parameter replacement: filter replacement
-    public func replace<T: Filter, D: Filter>(_ filter: T, by replacement: D) {
+    public func replace<T: FilterType, D: FilterType>(_ filter: T, by replacement: D) {
         return genericProxy.replace(filter, by: replacement)
     }
     

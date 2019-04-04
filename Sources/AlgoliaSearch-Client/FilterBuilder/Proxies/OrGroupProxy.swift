@@ -10,7 +10,7 @@ import Foundation
 
 /// Provides a specific type-safe interface for FilterBuilder specialized for a disjunctive group
 
-public struct OrGroupProxy<T: Filter>: GroupProxy {
+public struct OrGroupProxy<T: FilterType>: GroupProxy {
     
     let filterBuilder: FilterBuilder
     let group: AnyFilterGroup

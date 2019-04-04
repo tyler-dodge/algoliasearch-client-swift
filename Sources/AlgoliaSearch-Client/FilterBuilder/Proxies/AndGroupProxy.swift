@@ -31,19 +31,19 @@ public struct AndGroupProxy: GroupProxy {
     
     /// Adds filter to group
     /// - parameter filter: filter to add
-    public func add<T: Filter>(_ filter: T) {
+    public func add<T: FilterType>(_ filter: T) {
         filterBuilder.add(filter, to: group)
     }
     
     /// Adds the filters of a sequence to group
     /// - parameter filters: sequence of filters to add
-    public func addAll<T: Filter, S: Sequence>(_ filters: S) where S.Element == T {
+    public func addAll<T: FilterType, S: Sequence>(_ filters: S) where S.Element == T {
         filterBuilder.addAll(filters: filters, to: group)
     }
     
     /// Tests whether group contains a filter
     /// - parameter filter: sought filter
-    public func contains<T: Filter>(_ filter: T) -> Bool {
+    public func contains<T: FilterType>(_ filter: T) -> Bool {
         return filterBuilder.contains(filter, in: group)
     }
     
@@ -51,7 +51,7 @@ public struct AndGroupProxy: GroupProxy {
     /// - parameter filter: filter to move
     /// - parameter destination: target group
     /// - returns: true if movement succeeded, otherwise returns false
-    public func move<T: Filter>(_ filter: T, to destination: AndFilterGroup) -> Bool {
+    public func move<T: FilterType>(_ filter: T, to destination: AndFilterGroup) -> Bool {
         return filterBuilder.move(filter: filter, from: group, to: AnyFilterGroup(destination))
     }
     
@@ -59,7 +59,7 @@ public struct AndGroupProxy: GroupProxy {
     /// - parameter filter: filter to move
     /// - parameter destination: target group
     /// - returns: true if movement succeeded, otherwise returns false
-    public func move<T: Filter>(_ filter: T, to destination: OrFilterGroup<T>) -> Bool {
+    public func move<T: FilterType>(_ filter: T, to destination: OrFilterGroup<T>) -> Bool {
         return filterBuilder.move(filter: filter, from: group, to: AnyFilterGroup(destination))
     }
     
@@ -73,7 +73,7 @@ public struct AndGroupProxy: GroupProxy {
     /// Replaces filter in group by specified filter replacement
     /// - parameter filter: filter to replace
     /// - parameter replacement: filter replacement
-    public func replace<T: Filter, D: Filter>(_ filter: T, by replacement: D) {
+    public func replace<T: FilterType, D: FilterType>(_ filter: T, by replacement: D) {
         return filterBuilder.replace(filter: filter, by: replacement, in: group)
     }
     
@@ -85,13 +85,13 @@ public struct AndGroupProxy: GroupProxy {
     
     /// Removes filter from group
     /// - parameter filter: filter to remove
-    @discardableResult public func remove<T: Filter>(_ filter: T) -> Bool {
+    @discardableResult public func remove<T: FilterType>(_ filter: T) -> Bool {
         return filterBuilder.remove(filter, from: group)
     }
     
     /// Removes a sequence of filters from group
     /// - parameter filters: sequence of filters to remove
-    @discardableResult public func removeAll<T: Filter, S: Sequence>(_ filters: S) -> Bool where S.Element == T {
+    @discardableResult public func removeAll<T: FilterType, S: Sequence>(_ filters: S) -> Bool where S.Element == T {
         return filterBuilder.removeAll(filters, from: group)
     }
     
@@ -102,7 +102,7 @@ public struct AndGroupProxy: GroupProxy {
     
     /// Removes filter from group if contained by it, otherwise adds filter to group
     /// - parameter filter: filter to toggle
-    public func toggle<T: Filter>(_ filter: T) {
+    public func toggle<T: FilterType>(_ filter: T) {
         filterBuilder.toggle(filter, in: group)
     }
 

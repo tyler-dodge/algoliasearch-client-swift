@@ -10,7 +10,7 @@ import Foundation
 
 /// FilterBuilder wrapper accepting filter of a concrete type
 
-public class SpecializedFilterBuilder<T: Filter> {
+public class SpecializedFilterBuilder<T: FilterType> {
     
     private let genericFilterBuilder: FilterBuilder
     
@@ -22,10 +22,10 @@ public class SpecializedFilterBuilder<T: Filter> {
         genericFilterBuilder = FilterBuilder()
     }
     
-    public init<T: Filter>(_ filterBuilder: SpecializedFilterBuilder<T>) {
+    public init<T: FilterType>(_ filterBuilder: SpecializedFilterBuilder<T>) {
         self.genericFilterBuilder = FilterBuilder(filterBuilder.genericFilterBuilder)
     }
-    
+  
     public subscript(group: AndFilterGroup) -> SpecializedAndGroupProxy<T> {
         let genericProxy = genericFilterBuilder[group]
         return SpecializedAndGroupProxy<T>(genericProxy: genericProxy)

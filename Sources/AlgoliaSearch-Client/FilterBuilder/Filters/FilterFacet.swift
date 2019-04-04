@@ -13,68 +13,71 @@ import Foundation
  [Filter by string](https:www.algolia.com/doc/guides/managing-results/refine-results/filtering/how-to/filter-by-string/)
  [Filter by boolean](https:www.algolia.com/doc/guides/managing-results/refine-results/filtering/how-to/filter-by-boolean/)
 */
-public struct FilterFacet: Filter, Hashable {
+
+public extension Filter {
+  
+  struct Facet: FilterType {
     
     public let attribute: Attribute
     public let value: ValueType
     public var isNegated: Bool
     public let score: Int?
     
-    public let expression: String
-    
     public init(attribute: Attribute, value: ValueType, isNegated: Bool = false, score: Int? = nil) {
-        self.attribute = attribute
-        self.isNegated = isNegated
-        self.value = value
-        self.score = score
-
-        var scoreExpression: String = ""
-        if let score = score {
-          scoreExpression = "<score=\(String(score))>"
-        }
-
-        self.expression = """
-        "\(attribute)":"\(value)\(scoreExpression)"
-        """
+      self.attribute = attribute
+      self.isNegated = isNegated
+      self.value = value
+      self.score = score
     }
     
     public init(_ facetTuple: FacetTuple) {
-        self.init(attribute: facetTuple.0, value: facetTuple.1)
+      self.init(attribute: facetTuple.0, value: facetTuple.1)
     }
     
     public init(attribute: Attribute, stringValue: String, isNegated: Bool = false) {
-        self.init(attribute: attribute, value: .string(stringValue), isNegated: isNegated)
+      self.init(attribute: attribute, value: .string(stringValue), isNegated: isNegated)
     }
     
     public init(attribute: Attribute, floatValue: Float, isNegated: Bool = false) {
-        self.init(attribute: attribute, value: .float(floatValue), isNegated: isNegated)
+      self.init(attribute: attribute, value: .float(floatValue), isNegated: isNegated)
     }
     
     public init(attribute: Attribute, boolValue: Bool, isNegated: Bool = false) {
-        self.init(attribute: attribute, value: .bool(boolValue), isNegated: isNegated)
+      self.init(attribute: attribute, value: .bool(boolValue), isNegated: isNegated)
     }
     
-    public func replacingAttribute(by attribute: Attribute) -> FilterFacet {
-        return FilterFacet(attribute: attribute, value: value, isNegated: isNegated)
-    }
-    
+  }
+  
 }
 
-extension FilterFacet: RawRepresentable {
+extension Filter.Facet: CustomStringConvertible {
+  
+  public var description: String {
+    let scoreExpression = score.flatMap { "<score=\(String($0))>" } ?? ""
+    let expression = """
+    "\(attribute)":"\(value)\(scoreExpression)"
+    """
+    let prefix = isNegated ? "NOT " : ""
+    return prefix + expression
+  }
+  
+}
+
+extension Filter.Facet: RawRepresentable {
 
     public typealias RawValue = (Attribute, ValueType)
     
-    public init?(rawValue: (Attribute, FilterFacet.ValueType)) {
+    public init?(rawValue: (Attribute, Filter.Facet.ValueType)) {
         self.init(attribute: rawValue.0, value: rawValue.1)
     }
     
-    public var rawValue: (Attribute, FilterFacet.ValueType) {
+    public var rawValue: (Attribute, Filter.Facet.ValueType) {
         return (attribute, value)
     }
     
 }
 
-extension FilterFacet {
+extension Filter.Facet {
     
     public enum ValueType: CustomStringConvertible, Hashable {
         
@@ -97,7 +100,7 @@ extension FilterFacet {
     
 }
 
-extension FilterFacet.ValueType: ExpressibleByBooleanLiteral {
+extension Filter.Facet.ValueType: ExpressibleByBooleanLiteral {
     
     public typealias BooleanLiteralType = Bool
     
@@ -107,7 +110,7 @@ extension FilterFacet.ValueType: ExpressibleByBooleanLiteral {
     
 }
 
-extension FilterFacet.ValueType: ExpressibleByFloatLiteral {
+extension Filter.Facet.ValueType: ExpressibleByFloatLiteral {
     
     public typealias FloatLiteralType = Float
     
@@ -117,7 +120,7 @@ extension FilterFacet.ValueType: ExpressibleByFloatLiteral {
     
 }
 
-extension FilterFacet.ValueType: ExpressibleByStringLiteral {
+extension Filter.Facet.ValueType: ExpressibleByStringLiteral {
     
     public typealias StringLiterlalType = String
     
@@ -127,7 +130,7 @@ extension FilterFacet.ValueType: ExpressibleByStringLiteral {
     
 }
 
-extension FilterFacet.ValueType: ExpressibleByIntegerLiteral {
+extension Filter.Facet.ValueType: ExpressibleByIntegerLiteral {
     
     public typealias IntegerLiteralType = Int
     

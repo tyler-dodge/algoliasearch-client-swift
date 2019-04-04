@@ -29,17 +29,17 @@ public class FilterBuilder {
         groups[group] = filters.isEmpty ? nil : filters
     }
     
-    func add<T: Filter>(_ filter: T, to group: AnyFilterGroup) {
+    func add<T: FilterType>(_ filter: T, to group: AnyFilterGroup) {
         addAll(filters: [filter], to: group)
     }
     
-    func addAll<T: Filter, S: Sequence>(filters: S, to group: AnyFilterGroup) where S.Element == T {
+    func addAll<T: FilterType, S: Sequence>(filters: S, to group: AnyFilterGroup) where S.Element == T {
         let existingFilters = groups[group] ?? []
         let updatedFilters = existingFilters.union(filters.map(AnyFilter.init))
         update(updatedFilters, for: group)
     }
     
-    func contains<T: Filter>(_ filter: T, in group: AnyFilterGroup) -> Bool {
+    func contains<T: FilterType>(_ filter: T, in group: AnyFilterGroup) -> Bool {
         let anyFilter = AnyFilter(filter)
         guard let filtersForGroup = groups[group] else {
             return false
@@ -55,7 +55,7 @@ public class FilterBuilder {
         update(updatedFilters, for: group)
     }
     
-    func replace<T: Filter, D: Filter>(filter: T, by replacement: D, in group: AnyFilterGroup) {
+    func replace<T: FilterType, D: FilterType>(filter: T, by replacement: D, in group: AnyFilterGroup) {
         guard let filtersForGroup = groups[group] else { return }
         let filtersToReplace = filtersForGroup.filter { AnyFilter(filter) == $0 }
         let filtersReplacement = [AnyFilter(replacement)]
@@ -63,13 +63,13 @@ public class FilterBuilder {
         update(updatedFilters, for: group)
     }
     
-    func replace<T: Filter>(_ filter: T, by replacement: T) {
+    func replace<T: FilterType>(_ filter: T, by replacement: T) {
         groups.keys.forEach { group in
             replace(filter: filter, by: replacement, in: group)
         }
     }
     
-    func move<T: Filter>(filter: T, from origin: AnyFilterGroup, to destination: AnyFilterGroup) -> Bool {
+    func move<T: FilterType>(filter: T, from origin: AnyFilterGroup, to destination: AnyFilterGroup) -> Bool {
         if remove(filter, from: origin) {
             add(filter, to: destination)
             return true
@@ -77,11 +77,11 @@ public class FilterBuilder {
         return false
     }
     
-    @discardableResult func remove<T: Filter>(_ filter: T, from anyGroup: AnyFilterGroup) -> Bool {
+    @discardableResult func remove<T: FilterType>(_ filter: T, from anyGroup: AnyFilterGroup) -> Bool {
         return removeAll([filter], from: anyGroup)
     }
     
-    @discardableResult func removeAll<T: Filter, S: Sequence>(_ filters: S, from anyGroup: AnyFilterGroup) -> Bool where S.Element == T {
+    @discardableResult func removeAll<T: FilterType, S: Sequence>(_ filters: S, from anyGroup: AnyFilterGroup) -> Bool where S.Element == T {
         let filtersToRemove = filters.map(AnyFilter.init)
         guard let existingFilters = groups[anyGroup], !existingFilters.isDisjoint(with: filtersToRemove) else {
             return false
@@ -101,7 +101,7 @@ public class FilterBuilder {
         update(updatedFilters, for: group)
     }
     
-    func toggle<T: Filter>(_ filter: T, in group: AnyFilterGroup) {
+    func toggle<T: FilterType>(_ filter: T, in group: AnyFilterGroup) {
         if contains(filter, in: group) {
             remove(filter, from: group)
         } else {
@@ -142,7 +142,7 @@ public extension FilterBuilder {
         return AndGroupProxy(filterBuilder: self, group: group)
     }
     
-    subscript<T: Filter>(group: OrFilterGroup<T>) -> OrGroupProxy<T> {
+    subscript<T: FilterType>(group: OrFilterGroup<T>) -> OrGroupProxy<T> {
         return OrGroupProxy(filterBuilder: self, group: group)
     }
     
@@ -153,7 +153,7 @@ public extension FilterBuilder {
     
     /// Tests whether FilterBuilder contains a filter
     /// - parameter filter:
-    func contains<T: Filter>(_ filter: T) -> Bool {
+    func contains<T: FilterType>(_ filter: T) -> Bool {
         let anyFilter = AnyFilter(filter)
         return getAllFilters().contains(anyFilter)
     }
@@ -172,7 +172,7 @@ public extension FilterBuilder {
     /// - parameter source: source group
     /// - parameter destination: target group
     /// - returns: true if movement succeeded, otherwise returns false
-    func move<T: Filter>(_ filter: T, from source: OrFilterGroup<T>, to destination: AndFilterGroup) -> Bool {
+    func move<T: FilterType>(_ filter: T, from source: OrFilterGroup<T>, to destination: AndFilterGroup) -> Bool {
         return move(filter: filter, from: AnyFilterGroup(source), to: AnyFilterGroup(destination))
     }
     
@@ -181,19 +181,19 @@ public extension FilterBuilder {
     /// - parameter source: source group
     /// - parameter destination: target group
     /// - returns: true if movement succeeded, otherwise returns false
-    func move<T: Filter>(_ filter: T, from source: AndFilterGroup, to destination: OrFilterGroup<T>) -> Bool {
+    func move<T: FilterType>(_ filter: T, from source: AndFilterGroup, to destination: OrFilterGroup<T>) -> Bool {
         return move(filter: filter, from: AnyFilterGroup(source), to: AnyFilterGroup(destination))
     }
     
     /// Removes filter from FilterBuilder
     /// - parameter filter: filter to remove
-    @discardableResult func remove<T: Filter>(_ filter: T) -> Bool {
+    @discardableResult func remove<T: FilterType>(_ filter: T) -> Bool {
         return groups.map { remove(filter, from: $0.key) }.reduce(false) { $0 || $1 }
     }
     
     /// Removes a sequence of filters from FilterBuilder
     /// - parameter filters: sequence of filters to remove
-    func removeAll<T: Filter, S: Sequence>(_ filters: S) where S.Element == T {
+    func removeAll<T: FilterType, S: Sequence>(_ filters: S) where S.Element == T {
         let anyFilters = filters.map(AnyFilter.init)
         groups.keys.forEach { group in
             let existingFilters = groups[group] ?? []
@@ -234,7 +234,7 @@ public extension FilterBuilder {
     
     /// Returns a set of filters of specified type for attribute
     /// - parameter attribute: target attribute
-    func getFilters<T: Filter>(for attribute: Attribute) -> Set<T> {
+    func getFilters<T: FilterType>(for attribute: Attribute) -> Set<T> {
         let filtersArray: [T] = getAllFilters()
             .filter { $0.attribute == attribute }
             .compactMap { $0.extractAsFilter()  }
@@ -257,12 +257,12 @@ public extension FilterBuilder {
     }
     
     /// Returns a dictionary of all facet filters with their associated values
-    func getFacetFilters() -> [Attribute: Set<FilterFacet.ValueType>] {
-        let facetFilters: [FilterFacet] = groups
+    func getFacetFilters() -> [Attribute: Set<Filter.Facet.ValueType>] {
+        let facetFilters: [Filter.Facet] = groups
             .compactMap { $0.value }
             .flatMap { $0 }
             .compactMap { $0.extractAsFilter() }
-        var refinements: [Attribute: Set<FilterFacet.ValueType>] = [:]
+        var refinements: [Attribute: Set<Filter.Facet.ValueType>] = [:]
         for filter in facetFilters {
             let existingValues = refinements[filter.attribute, default: []]
             let updatedValues = existingValues.union([filter.value])
@@ -291,14 +291,14 @@ extension FilterBuilder {
     /// Adds filter to conjunctive group
     /// - parameter filter: filter to add
     /// - parameter group: target group
-    public func add<T: Filter>(_ filter: T, to group: AndFilterGroup) {
+    public func add<T: FilterType>(_ filter: T, to group: AndFilterGroup) {
         add(filter, to: AnyFilterGroup(group))
     }
     
     /// Adds the filters of a sequence to conjunctive group
     /// - parameter filters: sequence of filters to add
     /// - parameter group: target group
-    public func addAll<T: Filter, S: Sequence>(_ filters: S, to group: AndFilterGroup) where S.Element == T {
+    public func addAll<T: FilterType, S: Sequence>(_ filters: S, to group: AndFilterGroup) where S.Element == T {
         addAll(filters: filters, to: AnyFilterGroup(group))
     }
     
@@ -306,7 +306,7 @@ extension FilterBuilder {
     /// - parameter filter: filter to check
     /// - parameter group: target group
     /// - returns: true if filter is contained by specified group
-    public func contains<T: Filter>(_ filter: T, in group: AndFilterGroup) -> Bool {
+    public func contains<T: FilterType>(_ filter: T, in group: AndFilterGroup) -> Bool {
         return contains(filter, in: AnyFilterGroup(group))
     }
     
@@ -314,7 +314,7 @@ extension FilterBuilder {
     /// - parameter filter: filter to replace
     /// - parameter replacement: filter replacement
     /// - parameter group: target group
-    public func replace<T: Filter, D: Filter>(_ filter: T, by replacement: D, in group: AndFilterGroup) {
+    public func replace<T: FilterType, D: FilterType>(_ filter: T, by replacement: D, in group: AndFilterGroup) {
         return replace(filter: filter, by: replacement, in: AnyFilterGroup(group))
     }
     
@@ -323,14 +323,14 @@ extension FilterBuilder {
     /// - parameter source: source group
     /// - parameter destination: target group
     /// - returns: true if movement succeeded, otherwise returns false
-    public func move<T: Filter>(_ filter: T, from source: AndFilterGroup, to destination: AndFilterGroup) -> Bool {
+    public func move<T: FilterType>(_ filter: T, from source: AndFilterGroup, to destination: AndFilterGroup) -> Bool {
         return move(filter: filter, from: AnyFilterGroup(source), to: AnyFilterGroup(destination))
     }
 
     /// Removes filter from conjunctive group
     /// - parameter filter: filter to remove
     /// - parameter group: target group
-    @discardableResult public func remove<T: Filter>(_ filter: T, from group: AndFilterGroup) -> Bool {
+    @discardableResult public func remove<T: FilterType>(_ filter: T, from group: AndFilterGroup) -> Bool {
         return remove(filter, from: AnyFilterGroup(group))
     }
     
@@ -343,7 +343,7 @@ extension FilterBuilder {
     /// Removes filter from conjunctive group if contained by it, otherwise adds filter to group
     /// - parameter filter: filter to toggle
     /// - parameter group: target group
-    public func toggle<T: Filter>(_ filter: T, in group: AndFilterGroup) {
+    public func toggle<T: FilterType>(_ filter: T, in group: AndFilterGroup) {
         toggle(filter, in: AnyFilterGroup(group))
     }
 
@@ -356,14 +356,14 @@ extension FilterBuilder {
     /// Adds filter to disjunctive group
     /// - parameter filter: filter to add
     /// - parameter group: target group
-    public func add<T: Filter>(_ filter: T, to group: OrFilterGroup<T>) {
+    public func add<T: FilterType>(_ filter: T, to group: OrFilterGroup<T>) {
         add(filter, to: AnyFilterGroup(group))
     }
     
     /// Adds the filters of a sequence to disjunctive group
     /// - parameter filters: sequence of filters to add
     /// - parameter group: target group
-    public func addAll<T: Filter, S: Sequence>(_ filters: S, to group: OrFilterGroup<T>) where S.Element == T {
+    public func addAll<T: FilterType, S: Sequence>(_ filters: S, to group: OrFilterGroup<T>) where S.Element == T {
         addAll(filters: filters, to: AnyFilterGroup(group))
     }
     
@@ -371,7 +371,7 @@ extension FilterBuilder {
     /// - parameter filter: filter to check
     /// - parameter group: target group
     /// - returns: true if filter is contained by specified group
-    public func contains<T: Filter>(_ filter: T, in group: OrFilterGroup<T>) -> Bool {
+    public func contains<T: FilterType>(_ filter: T, in group: OrFilterGroup<T>) -> Bool {
         return contains(filter, in: AnyFilterGroup(group))
     }
     
@@ -379,7 +379,7 @@ extension FilterBuilder {
     /// - parameter filter: filter to replace
     /// - parameter replacement: filter replacement
     /// - parameter group: target group
-    public func replace<T: Filter>(_ filter: T, by replacement: T, in group: OrFilterGroup<T>) {
+    public func replace<T: FilterType>(_ filter: T, by replacement: T, in group: OrFilterGroup<T>) {
         replace(filter: filter, by: filter, in: AnyFilterGroup(group))
     }
     
@@ -388,27 +388,27 @@ extension FilterBuilder {
     /// - parameter source: source group
     /// - parameter destination: target group
     /// - returns: true if movement succeeded, otherwise returns false
-    public func move<T: Filter>(_ filter: T, from source: OrFilterGroup<T>, to destination: OrFilterGroup<T>) -> Bool {
+    public func move<T: FilterType>(_ filter: T, from source: OrFilterGroup<T>, to destination: OrFilterGroup<T>) -> Bool {
         return move(filter: filter, from: AnyFilterGroup(source), to: AnyFilterGroup(destination))
     }
     
     /// Removes filter from disjunctive group
     /// - parameter filter: filter to remove
     /// - parameter group: target group
-    @discardableResult public func remove<T: Filter>(_ filter: T, from group: OrFilterGroup<T>) -> Bool {
+    @discardableResult public func remove<T: FilterType>(_ filter: T, from group: OrFilterGroup<T>) -> Bool {
         return remove(filter, from: AnyFilterGroup(group))
     }
     
     /// Removes all filters from disjunctive group
     /// - parameter group: target group
-    public func removeAll<T: Filter>(from group: OrFilterGroup<T>) {
+    public func removeAll<T: FilterType>(from group: OrFilterGroup<T>) {
         removeAll(from: AnyFilterGroup(group))
     }
     
     /// Removes filter from disjunctive group if contained by it, otherwise adds filter to group
     /// - parameter filter: filter to toggle
     /// - parameter group: target group
-    public func toggle<T: Filter>(_ filter: T, in group: OrFilterGroup<T>) {
+    public func toggle<T: FilterType>(_ filter: T, in group: OrFilterGroup<T>) {
         toggle(filter, in: AnyFilterGroup(group))
     }
     
