@@ -11,7 +11,7 @@ import Foundation
 public enum Filter {}
 
 /// Abstract filter protocol
-public protocol FilterType: CustomStringConvertible {
+public protocol FilterType {
 
     /// Identifier of field affected by filter
     var attribute: Attribute { get }
@@ -23,6 +23,14 @@ public protocol FilterType: CustomStringConvertible {
     /// parameter value: new value of isNegated
     mutating func not(value: Bool)
     
+}
+
+extension FilterType {
+  
+  public mutating func not(value: Bool = true) {
+    isNegated = value
+  }
+  
 }
 
 /**
@@ -79,11 +87,7 @@ private final class _AnyFilterBox<Concrete: FilterType>: _AnyFilterBase {
         get { return concrete.isNegated }
         set { concrete.isNegated = newValue }
     }
-    
-    override var description: String {
-        return concrete.description
-    }
-      
+          
 }
 
 final class AnyFilter: FilterType {
@@ -111,12 +115,4 @@ final class AnyFilter: FilterType {
         return (box as? _AnyFilterBox<T>)?.concrete
     }
     
-}
-
-extension FilterType {
-  
-    public mutating func not(value: Bool = true) {
-        isNegated = value
-    }
-  
 }

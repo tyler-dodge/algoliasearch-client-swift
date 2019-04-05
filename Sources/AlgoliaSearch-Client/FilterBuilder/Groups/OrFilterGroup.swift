@@ -27,7 +27,7 @@ public struct OrFilterGroup<T: FilterType>: FilterGroup {
   }
   
   public var description: String {
-    let filtersDescription = filters.map { $0.description }.joined(separator: " OR ")
+    let filtersDescription = ""
     
     switch filters.count {
     case 0:
@@ -47,7 +47,7 @@ public struct OrFilterGroup<T: FilterType>: FilterGroup {
 extension Array where Element: FilterGroup {
   
   var description: String {
-    return filter { !$0.isEmpty }.map { $0.description }.joined(separator: " AND ")
+    return ""
   }
   
 }

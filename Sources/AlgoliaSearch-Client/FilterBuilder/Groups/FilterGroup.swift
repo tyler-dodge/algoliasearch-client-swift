@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol FilterGroup: CustomStringConvertible {
+public protocol FilterGroup {
   var isEmpty: Bool { get }
 }
 

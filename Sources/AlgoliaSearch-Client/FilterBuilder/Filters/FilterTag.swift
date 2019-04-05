@@ -13,19 +13,14 @@ import Foundation
  [Reference](https:www.algolia.com/doc/guides/managing-results/refine-results/filtering/how-to/filter-by-tags/)
 */
 
+
 public extension Filter {
   
-  struct Tag: FilterType, ExpressibleByStringLiteral {
-    
-    public typealias StringLiteralType = String
+  struct Tag: FilterType {
     
     public let attribute: Attribute = .tags
     public var isNegated: Bool
     public let value: String
-    
-    public init(stringLiteral string: String) {
-      self.init(value: string, isNegated: false)
-    }
     
     public init(value: String, isNegated: Bool = false) {
       self.isNegated = isNegated
@@ -36,14 +31,12 @@ public extension Filter {
   
 }
 
-extension Filter.Tag: CustomStringConvertible {
+extension Filter.Tag: ExpressibleByStringLiteral {
   
-  public var description: String {
-    let expression = """
-    "\(attribute)":"\(value)"
-    """
-    let prefix = isNegated ? "NOT " : ""
-    return prefix + expression
+  public typealias StringLiteralType = String
+
+  public init(stringLiteral string: String) {
+    self.init(value: string, isNegated: false)
   }
-  
+
 }

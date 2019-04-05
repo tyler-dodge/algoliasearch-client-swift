@@ -27,7 +27,7 @@ public struct AndFilterGroup: FilterGroup {
   }
 
   public var description: String {
-    let filtersDescription = filters.map { $0.description }.joined(separator: " AND ")
+    let filtersDescription = ""
     
     switch filters.count {
     case 0:

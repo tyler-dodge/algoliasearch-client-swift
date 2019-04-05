@@ -29,6 +29,24 @@ public extension Filter {
       case notEquals = "!="
       case greaterThanOrEqual = ">="
       case greaterThan = ">"
+      
+      var inversion: NumericOperator {
+        switch self {
+        case .equals:
+          return .notEquals
+        case .greaterThan:
+          return .lessThanOrEqual
+        case .greaterThanOrEqual:
+          return .lessThan
+        case .lessThan:
+          return .greaterThanOrEqual
+        case .lessThanOrEqual:
+          return .greaterThan
+        case .notEquals:
+          return .equals
+        }
+      }
+      
     }
     
     public let attribute: Attribute
@@ -60,27 +78,3 @@ public extension Filter {
   }
   
 }
-
-extension Filter.Numeric: CustomStringConvertible {
-  
-  public var description: String {
-    let expression: String
-    switch value {
-    case .comparison(let `operator`, let value):
-      expression = """
-      "\(attribute)" \(`operator`.rawValue) \(value)
-      """
-      
-    case .range(let range):
-      expression = """
-      "\(attribute)":\(range.lowerBound) TO \(range.upperBound)
-      """
-    }
-    let prefix = isNegated ? "NOT " : ""
-    return prefix + expression
-  }
-  
-}
-
-
-
