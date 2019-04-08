@@ -10,44 +10,28 @@ import Foundation
 
 /// Representation of disjunctive group of filters
 
-public struct OrFilterGroup<T: FilterType>: FilterGroup {
+extension FilterGroup {
   
-  var filters: [T]
-  
-  public var isEmpty: Bool {
-    return filters.isEmpty
-  }
-  
-  public init(filters: [T] = []) {
-    self.filters = filters
-  }
-  
-  public static func or<T: FilterType>(_ filters: [T]) -> OrFilterGroup<T> {
-    return OrFilterGroup<T>(filters: filters)
-  }
-  
-  public var description: String {
-    let filtersDescription = ""
+  public struct Or<T: FilterType>: FilterGroupType {
     
-    switch filters.count {
-    case 0:
-      return ""
-      
-    case 1:
-      return filtersDescription
-      
-    default:
-      return "( \(filtersDescription) )"
+    public var filters: [FilterType] {
+      return typedFilters
     }
-  }
-  
-  
-}
-
-extension Array where Element: FilterGroup {
-  
-  var description: String {
-    return ""
+    
+    private var typedFilters: [T]
+    
+    public var isEmpty: Bool {
+      return filters.isEmpty
+    }
+    
+    public init(filters: [T] = []) {
+      self.typedFilters = filters
+    }
+    
+    public static func or<T: FilterType>(_ filters: [T]) -> FilterGroup.Or<T> {
+      return FilterGroup.Or<T>(filters: filters)
+    }
+    
   }
   
 }

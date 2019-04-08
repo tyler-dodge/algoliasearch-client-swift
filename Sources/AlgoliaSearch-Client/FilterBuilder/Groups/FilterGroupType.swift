@@ -8,8 +8,12 @@
 
 import Foundation
 
-public protocol FilterGroup {
-  var isEmpty: Bool { get }
+enum FilterGroup {}
+
+public protocol FilterGroupType {
+  
+  var filters: [FilterType] { get }
+  
 }
 
 /**

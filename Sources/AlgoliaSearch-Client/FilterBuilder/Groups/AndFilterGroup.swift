@@ -10,36 +10,26 @@ import Foundation
 
 /// Representation of conjunctive group of filters
 
-public struct AndFilterGroup: FilterGroup {
+extension FilterGroup {
   
-  public var filters: [FilterType]
-  
-  public var isEmpty: Bool {
-    return filters.isEmpty
-  }
-  
-  public init(filters: [FilterType]) {
-      self.filters = filters
-  }
-  
-  public static func and(_ filters: [FilterType]) -> AndFilterGroup {
-      return AndFilterGroup(filters: filters)
-  }
-
-  public var description: String {
-    let filtersDescription = ""
+  public struct And: FilterGroupType {
     
-    switch filters.count {
-    case 0:
-      return ""
-      
-    case 1:
-      return filtersDescription
-      
-    default:
-      return "( \(filtersDescription) )"
+    public var filters: [FilterType]
+    
+    public var isEmpty: Bool {
+      return filters.isEmpty
+    }
+    
+    public init(filters: [FilterType]) {
+      self.filters = filters
+    }
+    
+    public static func and(_ filters: [FilterType]) -> FilterGroup.And {
+      return FilterGroup.And(filters: filters)
     }
     
   }
-    
+  
 }
+
+

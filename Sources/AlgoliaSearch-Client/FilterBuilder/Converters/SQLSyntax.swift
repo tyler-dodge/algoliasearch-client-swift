@@ -14,7 +14,7 @@ protocol SQLSyntaxConvertible {
 
 class SQLFilterGroupConverter {
   
-  func convert(_ filterGroups: [FilterGroup]) -> String {
+  func convert(_ filterGroups: [FilterGroupType]) -> String {
     return ""
   }
   
@@ -24,19 +24,14 @@ class SQLFilterConverter: FilterConverter {
   
   typealias Output = String
   
-  func convert(_ filter: FilterType) -> String {
-    switch filter {
-    case let facetFilter as Filter.Facet:
+  func convert(_ input: Filter) -> String {
+    switch input {
+    case .facet(let facetFilter):
       return facetFilter.sqlForm
-      
-    case let numericFilter as Filter.Numeric:
+    case .numeric(let numericFilter):
       return numericFilter.sqlForm
-      
-    case let tagFilter as Filter.Tag:
+    case .tag(let tagFilter):
       return tagFilter.sqlForm
-      
-    default:
-      return ""
     }
   }
   
@@ -63,7 +58,6 @@ extension Filter.Numeric: SQLSyntaxConvertible {
   
 }
 
-
 extension Filter.Facet: SQLSyntaxConvertible {
   
   public var sqlForm: String {
@@ -89,20 +83,44 @@ extension Filter.Tag: SQLSyntaxConvertible {
   
 }
 
-extension AndFilterGroup: SQLSyntaxConvertible {
+extension SQLSyntaxConvertible where Self: FilterGroupType {
   
-  public var sqlForm: String {
-    return ""
+  func groupSQLForm(for filters: [FilterType], withSeparator separator: String) -> String {
+    
+    let compatibleFilters = filters.compactMap { $0 as? SQLSyntaxConvertible }
+    
+    if compatibleFilters.isEmpty {
+      return ""
+    } else if let singleFilter = compatibleFilters.first, compatibleFilters.count == 1 {
+      return singleFilter.sqlForm
+    } else {
+      return "( \(compatibleFilters.map { $0.sqlForm }.joined(separator: separator)) )"
+    }
+
   }
   
 }
 
-extension OrFilterGroup: SQLSyntaxConvertible {
+extension FilterGroup.And: SQLSyntaxConvertible {
   
   public var sqlForm: String {
-    return ""
+    return groupSQLForm(for: filters, withSeparator: " AND ")
   }
   
 }
 
+extension FilterGroup.Or: SQLSyntaxConvertible {
+  
+  public var sqlForm: String {
+    return groupSQLForm(for: filters, withSeparator: " OR ")
+  }
+  
+}
 
+extension Collection where Element == FilterGroupType & SQLSyntaxConvertible {
+  
+  var sqlForm: String {
+    return map { $0.sqlForm }.joined(separator: " AND ")
+  }
+  
+}

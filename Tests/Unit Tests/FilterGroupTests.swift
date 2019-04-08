@@ -12,26 +12,24 @@ import XCTest
 
 class FilterGroupTests: XCTestCase {
     
-    func testComparison() {
-        XCTAssertEqual(AndFilterGroup(name: "a"), AndFilterGroup(name: "a"))
-        XCTAssertNotEqual(AndFilterGroup(name: "a"), AndFilterGroup(name: "b"))
-        XCTAssertEqual(OrFilterGroup<FilterFacet>(name: "a"), OrFilterGroup<FilterFacet>(name: "a"))
-        XCTAssertNotEqual(OrFilterGroup<FilterFacet>(name: "a"), OrFilterGroup<FilterFacet>(name: "b"))
-    }
+  func test() {
     
-    func testTypeErasedComparison() {
-        XCTAssertEqual(AnyFilterGroup(AndFilterGroup(name: "a")), AnyFilterGroup(AndFilterGroup(name: "a")))
-        XCTAssertNotEqual(AnyFilterGroup(AndFilterGroup(name: "a")), AnyFilterGroup(AndFilterGroup(name: "b")))
-        XCTAssertEqual(AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "a")), AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "a")))
-        XCTAssertNotEqual(AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "a")), AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "b")))
-        XCTAssertNotEqual(AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "a")), AnyFilterGroup(AndFilterGroup(name: "b")))
-    }
+    let group = FilterGroup.And(filters: [
+      Filter.Tag(value: "t"),
+      Filter.Numeric(attribute: "size", operator: .equals, value: 40),
+      Filter.Facet(attribute: "brand", stringValue: "sony")
+    ])
     
-    func testTypeErasedFlags() {
-        XCTAssertTrue(AnyFilterGroup(AndFilterGroup(name: "a")).isConjunctive)
-        XCTAssertFalse(AnyFilterGroup(AndFilterGroup(name: "a")).isDisjunctive)
-        XCTAssertFalse(AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "a")).isConjunctive)
-        XCTAssertTrue(AnyFilterGroup(OrFilterGroup<FilterFacet>(name: "a")).isDisjunctive)
-    }
+    let orGroup = FilterGroup.Or(filters: [
+      Filter.Facet(attribute: "brand", stringValue: "philips"),
+      Filter.Facet(attribute: "diagonal", floatValue: 42),
+      Filter.Facet(attribute: "featured", boolValue: true),
+    ])
     
+    let groups: [FilterGroupType & SQLSyntaxConvertible] = [group, orGroup]
+    
+    print(groups.sqlForm)
+    
+  }
+  
 }

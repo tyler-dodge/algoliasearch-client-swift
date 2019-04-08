@@ -8,7 +8,13 @@
 
 import Foundation
 
-public enum Filter {}
+public enum Filter {
+  
+  case facet(Facet)
+  case numeric(Numeric)
+  case tag(Tag)
+    
+}
 
 /// Abstract filter protocol
 public protocol FilterType {
