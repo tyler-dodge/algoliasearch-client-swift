@@ -15,7 +15,7 @@ import Foundation
 
 public extension Filter {
   
-  struct Numeric: FilterType {
+  struct Numeric: FilterType, Equatable {
     
     public enum ValueType: Hashable {
       case range(ClosedRange<Float>)

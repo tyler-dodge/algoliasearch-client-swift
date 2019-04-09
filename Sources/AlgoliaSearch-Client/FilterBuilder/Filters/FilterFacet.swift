@@ -16,7 +16,7 @@ import Foundation
 
 public extension Filter {
   
-  struct Facet: FilterType {
+  struct Facet: FilterType, Equatable {
     
     public let attribute: Attribute
     public let value: ValueType

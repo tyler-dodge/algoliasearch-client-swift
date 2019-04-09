@@ -18,14 +18,6 @@ class FilterTests: XCTestCase {
         testFilterFacet(with: true)
     }
 
-//    func testCopyConstructor() {
-//        let filterBuilder = FilterBuilder()
-//        filterBuilder[.and("a")] +++ ("brand", "sony") +++ ("size", 40) +++ "featured"
-//        filterBuilder[.or("b")] +++ "tag1" +++ "tag2" +++ "tag3"
-//        let filterBuilderCopy = FilterBuilder(filterBuilder)
-//        XCTAssertEqual(filterBuilder.groups, filterBuilderCopy.groups)
-//    }
-
     func testFilterFacet(with value: Filter.Facet.ValueType) {
         let attribute: Attribute = "a"
         var facetFilter = Filter.Facet(attribute: attribute, value: value)
@@ -95,32 +87,32 @@ class FilterTests: XCTestCase {
         let boolFacetFilter = Filter.Facet(attribute: "a", value: true)
         XCTAssertFalse(boolFacetFilter.isNegated)
         XCTAssertTrue((!boolFacetFilter).isNegated)
-//        XCTAssertEqual(!boolFacetFilter, Filter.Facet(attribute: "a", value: true, isNegated: true))
+        XCTAssertEqual(!boolFacetFilter, Filter.Facet(attribute: "a", value: true, isNegated: true))
 
         let numericFacetFilter = Filter.Facet(attribute: "a", value: 1)
         XCTAssertFalse(numericFacetFilter.isNegated)
         XCTAssertTrue((!numericFacetFilter).isNegated)
-//        XCTAssertEqual(!numericFacetFilter, Filter.Facet(attribute: "a", value: 1, isNegated: true))
+        XCTAssertEqual(!numericFacetFilter, Filter.Facet(attribute: "a", value: 1, isNegated: true))
 
         let stringFacetFilter = Filter.Facet(attribute: "a", value: "b")
         XCTAssertFalse(stringFacetFilter.isNegated)
         XCTAssertTrue((!stringFacetFilter).isNegated)
-//        XCTAssertEqual(!stringFacetFilter, Filter.Facet(attribute: "a", value: "b", isNegated: true))
+        XCTAssertEqual(!stringFacetFilter, Filter.Facet(attribute: "a", value: "b", isNegated: true))
 
         let filterTag = Filter.Tag(value: "a")
         XCTAssertFalse(filterTag.isNegated)
         XCTAssertTrue((!filterTag).isNegated)
-//        XCTAssertEqual(!filterTag, Filter.Tag(value: "a", isNegated: true))
+        XCTAssertEqual(!filterTag, Filter.Tag(value: "a", isNegated: true))
 
         let comparisonNumericFilter = Filter.Numeric(attribute: "a", operator: .equals, value: 10)
         XCTAssertFalse(comparisonNumericFilter.isNegated)
         XCTAssertTrue((!comparisonNumericFilter).isNegated)
-//        XCTAssertEqual(!comparisonNumericFilter, Filter.Numeric(attribute: "a", operator: .equals, value: 10, isNegated: true))
+        XCTAssertEqual(!comparisonNumericFilter, Filter.Numeric(attribute: "a", operator: .equals, value: 10, isNegated: true))
 
         let rangeNumericFilter = Filter.Numeric(attribute: "a", range: 0...10)
         XCTAssertFalse(rangeNumericFilter.isNegated)
         XCTAssertTrue((!rangeNumericFilter).isNegated)
-//        XCTAssertEqual(!rangeNumericFilter, Filter.Numeric(attribute: "a", range: 0...10, isNegated: true))
+        XCTAssertEqual(!rangeNumericFilter, Filter.Numeric(attribute: "a", range: 0...10, isNegated: true))
 
     }
   

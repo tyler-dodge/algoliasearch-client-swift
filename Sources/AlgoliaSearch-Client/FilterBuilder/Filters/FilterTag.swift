@@ -13,10 +13,9 @@ import Foundation
  [Reference](https:www.algolia.com/doc/guides/managing-results/refine-results/filtering/how-to/filter-by-tags/)
 */
 
-
 public extension Filter {
   
-  struct Tag: FilterType {
+  struct Tag: FilterType, Equatable {
     
     public let attribute: Attribute = .tags
     public var isNegated: Bool
