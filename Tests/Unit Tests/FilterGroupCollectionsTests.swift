@@ -7,3 +7,27 @@
 //
 
 import Foundation
+import XCTest
+@testable import InstantSearchClient
+
+class FilterGroupCollectionsTests: XCTestCase {
+
+  func testConversion() {
+    
+    let andGroup = FilterGroup.And(filters: [
+      Filter.Tag(value: "tag"),
+      Filter.Numeric(attribute: "size", operator: .equals, value: 40),
+      Filter.Facet(attribute: "brand", stringValue: "sony")
+    ])
+    
+    let orGroup = FilterGroup.Or(filters: [
+      Filter.Facet(attribute: "brand", stringValue: "philips"),
+      Filter.Facet(attribute: "diagonal", floatValue: 42),
+      Filter.Facet(attribute: "featured", boolValue: true),
+    ])
+    
+    XCTAssertEqual([andGroup, orGroup].sqlForm, "( \"_tags\":\"tag\" AND \"size\" = 40.0 AND \"brand\":\"sony\" ) AND ( \"brand\":\"philips\" OR \"diagonal\":\"42.0\" OR \"featured\":\"true\" )")
+    
+  }
+  
+}

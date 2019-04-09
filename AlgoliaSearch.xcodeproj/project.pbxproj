@@ -40,11 +40,10 @@
 		AF11777B225B8A0500C5B59B /* FilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB9778A21D5059C00094E1E /* FilterTests.swift */; };
 		AF11777C225B8A0700C5B59B /* FilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB9778A21D5059C00094E1E /* FilterTests.swift */; };
 		AF11777D225B8A0700C5B59B /* FilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB9778A21D5059C00094E1E /* FilterTests.swift */; };
-		AF11777F225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
-		AF117780225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
-		AF117781225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
-		AF117782225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
-		AF117783225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
+		AF117784225CFCB100C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
+		AF117785225CFCB500C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
+		AF117786225CFCB600C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
+		AF117787225CFCB600C5B59B /* FilterGroupCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF11777E225CFA6900C5B59B /* FilterGroupCollectionsTests.swift */; };
 		AF3DD0B921ECE1E200797959 /* OrFilterGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3DD0B821ECE1E200797959 /* OrFilterGroup.swift */; };
 		AF3DD0BB21ECE1EA00797959 /* AndFilterGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3DD0BA21ECE1EA00797959 /* AndFilterGroup.swift */; };
 		AF3DD0BC21ECE20200797959 /* OrFilterGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3DD0B821ECE1E200797959 /* OrFilterGroup.swift */; };
@@ -1328,7 +1327,6 @@
 				AFB9779621D50AEA00094E1E /* FilterTag.swift in Sources */,
 				5D7495A11A8E277400B0263F /* Helpers.swift in Sources */,
 				BC09F7771CAE743900ABB395 /* BrowseIterator.swift in Sources */,
-				AF11777F225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1341,6 +1339,7 @@
 				BC72244D1D9C137B00B56908 /* OnlineTestCase.swift in Sources */,
 				5D8FFA381AAB08830078869E /* ClientTests.swift in Sources */,
 				BCDA73781CA546800082B197 /* NetworkTests.swift in Sources */,
+				AF117784225CFCB100C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 				BCDA737E1CA555070082B197 /* MockURLSession.swift in Sources */,
 				BC4DDF131DD13423004D9A6E /* PlacesQueryTests.swift in Sources */,
 				BC4A7F3C1CB5373E00AF1DCB /* CancelTests.swift in Sources */,
@@ -1393,7 +1392,6 @@
 				5DB2515A1AAD9F2D00945339 /* Index.swift in Sources */,
 				BC01E66E1CA43CEE0067670B /* Request.swift in Sources */,
 				BC09F7781CAE743900ABB395 /* BrowseIterator.swift in Sources */,
-				AF117780225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1406,6 +1404,7 @@
 				BC72244E1D9C137B00B56908 /* OnlineTestCase.swift in Sources */,
 				5DB2515E1AAD9F3F00945339 /* ClientTests.swift in Sources */,
 				BCDA73791CA546800082B197 /* NetworkTests.swift in Sources */,
+				AF117787225CFCB600C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 				BCDA737F1CA555070082B197 /* MockURLSession.swift in Sources */,
 				BC4DDF141DD13423004D9A6E /* PlacesQueryTests.swift in Sources */,
 				BC4A7F3D1CB5373E00AF1DCB /* CancelTests.swift in Sources */,
@@ -1458,7 +1457,6 @@
 				BC23A6FE1D63541B00DF9034 /* BrowseIterator.swift in Sources */,
 				BC23A6F61D63541500DF9034 /* Client.swift in Sources */,
 				BC23A6FA1D63541500DF9034 /* IndexQuery.swift in Sources */,
-				AF117783225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1471,7 +1469,6 @@
 				BC4BD2821D54E48900170ECC /* Error.swift in Sources */,
 				BCD57D261D89970D00C5DE68 /* MultipleQueryEmulator.swift in Sources */,
 				BC4BD2831D54E48900170ECC /* IndexQuery.swift in Sources */,
-				AF117782225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 				BC4BD2951D54E50000170ECC /* MirroredIndex.swift in Sources */,
 				BC4DDEF91DD10EBA004D9A6E /* Types.swift in Sources */,
 				BC4BD2841D54E48900170ECC /* Cache.swift in Sources */,
@@ -1539,7 +1536,6 @@
 				BCD1F56A1CC61D1D0006E227 /* Request.swift in Sources */,
 				BCD1F5631CC61D050006E227 /* Client.swift in Sources */,
 				BCD1F5671CC61D130006E227 /* IndexQuery.swift in Sources */,
-				AF117781225CFA6900C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1552,6 +1548,7 @@
 				BC72244F1D9C137B00B56908 /* OnlineTestCase.swift in Sources */,
 				BCD1F56D1CC61DB30006E227 /* BrowseIteratorTests.swift in Sources */,
 				BCD1F56F1CC61DB80006E227 /* ClientTests.swift in Sources */,
+				AF117786225CFCB600C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 				BCD1F5741CC61DB80006E227 /* QueryTests.swift in Sources */,
 				BC4DDF151DD13423004D9A6E /* PlacesQueryTests.swift in Sources */,
 				BCD1F5711CC61DB80006E227 /* IndexTests.swift in Sources */,
@@ -1576,6 +1573,7 @@
 				BCE2E98A1E239D5C00F189F3 /* MockNetworkReachability.swift in Sources */,
 				BCD57D3E1D89B1EA00C5DE68 /* OfflineTestCase.swift in Sources */,
 				BCFC281C1D92660C00BFE0A0 /* MirroredIndexTests.swift in Sources */,
+				AF117785225CFCB500C5B59B /* FilterGroupCollectionsTests.swift in Sources */,
 				BCD57D3C1D89B1EA00C5DE68 /* OfflineClientTests.swift in Sources */,
 				BC6267EE1D8FE4180014C767 /* OfflineObjcBridging.m in Sources */,
 				AF3DD0C921EF9DFE00797959 /* FilterGroupTests.swift in Sources */,
