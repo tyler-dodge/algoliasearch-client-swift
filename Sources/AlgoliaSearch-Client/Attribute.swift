@@ -15,7 +15,7 @@ public struct Attribute: CustomStringConvertible, Hashable, ExpressibleByStringL
     public typealias StringLiteralType = String
     public typealias RawValue = String
     
-    var name: String
+    public var name: String
     
     public init(_ string: String) {
         self.name = string
